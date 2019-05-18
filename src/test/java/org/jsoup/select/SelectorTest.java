@@ -809,4 +809,25 @@ public class SelectorTest {
         assertEquals(1, els.size());
         assertEquals("Two", els.text());
     }
+
+    @Test public void selectMethod() {
+        Document doc = Jsoup.parse("<p><span>One</span><a href='//thumb.test.com/some/text/here'>Link</a>");
+        String text = doc.selectx("a::text()");
+        String attr = doc.selectx("a::attr(href)");
+        String repl = doc.selectx("a::attr(href)::replace(thumb,image)");
+        String repx = doc.selectx("a::attr(href)::replace(thumb|com,file)");
+        String fixu = doc.selectx("a::attr(href)::replace(thumb|com,file)::fixurl()");
+        String fixa = doc.selectx("a::attr(href)::fixurl()");
+        String spli = doc.selectx("a::attr(href)::split(\\.,1)"); //split by dot
+        String spl2 = doc.selectx("a::attr(href)::split(/,3)"); //split by slash
+
+        assertEquals("Link", text);
+        assertEquals("//thumb.test.com/some/text/here", attr);
+        assertEquals("//image.test.com/some/text/here", repl);
+        assertEquals("//file.test.file/some/text/here", repx);
+        assertEquals("http://file.test.file/some/text/here", fixu);
+        assertEquals("http://thumb.test.com/some/text/here", fixa);
+        assertEquals("test", spli);
+        assertEquals("some", spl2);
+    }
 }

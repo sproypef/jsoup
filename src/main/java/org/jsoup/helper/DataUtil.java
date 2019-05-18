@@ -272,4 +272,27 @@ public final class DataUtil {
             this.offset = offset;
         }
     }
+
+    public static String removeParenthesis(String inputStr){
+        return inputStr.replaceAll("[()]", "");
+    }
+
+    public static String fixHTTP(String url) {
+        try {
+            if (!url.substring(0, 6).equals("https:") && !url.substring(0, 5).equals("http:")) {
+                url = "http:" + url;
+            }
+            return url;
+        } catch (IndexOutOfBoundsException e) {
+            return "";
+        }
+    }
+
+    public static int valueOfInteger(String str) {
+        try {
+            return Integer.valueOf(str);
+        } catch (Exception e) {
+            return 0;
+        }
+    }
 }

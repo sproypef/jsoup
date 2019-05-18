@@ -1,6 +1,7 @@
 package org.jsoup.nodes;
 
 import org.jsoup.helper.ChangeNotifyingArrayList;
+import org.jsoup.helper.DataUtil;
 import org.jsoup.helper.Validate;
 import org.jsoup.internal.StringUtil;
 import org.jsoup.parser.ParseSettings;
@@ -370,6 +371,70 @@ public class Element extends Node {
      */
     public Elements select(String cssQuery) {
         return Selector.select(cssQuery, this);
+    }
+
+    /**
+     * Common select and more powelfull for attr() and text() methods in cssQuery.
+     * After common cssQuery add "::" and normal method call - Exclude ""
+     * Example:
+     * {@code el.select("a::attr(href)")}
+     * {@code el.select("a::text()")}
+     * 
+     * @param cssQuery
+     * @param innerMethod
+     * @return
+     */
+    public String selectx(String cssQueryM) {
+        Validate.notNull(cssQueryM);
+        String _select = "";
+        if (cssQueryM.contains("::")) {
+            String[] cssQueryParts = cssQueryM.split("::");
+            String cssQuery = "";
+            int pos = 0;
+            for (String cssPart : cssQueryParts) {
+                if (pos == 0) {
+                    cssQuery = cssPart;
+                    pos++;
+                    continue;
+                }
+                if (pos == 1) {
+                    if (cssPart.contains("attr")) {
+                        String p = DataUtil.removeParenthesis(cssPart.replace("attr", ""));
+                        _select = Selector.select(cssQuery, this).attr(p);
+                    }
+                    if (cssPart.contains("text")) {
+                        _select = Selector.select(cssQuery, this).text();
+                    }
+                } else {
+                    if(cssPart.contains("replace")){
+                        String[] p = DataUtil.removeParenthesis(cssPart.replace("replace", "")).split(",");
+                        if(p[0].contains("|")){
+                            String[] tar = p[0].split("\\|");
+                            for (String t : tar) {
+                                if(_select.contains(t)) _select = _select.replace(t, p[1]);   
+                            }
+                        } else {
+                            _select = _select.replace(p[0], p[1]);
+                        }                       
+                    }
+                    if(cssPart.contains("fixurl")){
+                        _select = DataUtil.fixHTTP(_select);
+                    }
+                    if (cssPart.contains("split")) {
+                        String[] p = DataUtil.removeParenthesis(cssPart.replace("split", "")).split(",");
+                        try {
+                            String[] s = _select.split(p[0]);
+                            _select = s[DataUtil.valueOfInteger(p[1])];
+                        } catch (Exception e) {
+                            return _select;
+                        }
+                    }
+                }
+                pos++;
+            }
+
+        }
+        return _select;
     }
 
     /**
