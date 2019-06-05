@@ -400,10 +400,16 @@ public class Element extends Node {
                 if (pos == 1) {
                     if (cssPart.contains("attr")) {
                         String p = DataUtil.removeParenthesis(cssPart.replace("attr", ""));
-                        _select = Selector.select(cssQuery, this).attr(p);
+                        if (cssQuery.length() > 0)
+                            _select = Selector.select(cssQuery, this).attr(p);
+                        else
+                            _select = this.attr(p);
                     }
                     if (cssPart.contains("text")) {
-                        _select = Selector.select(cssQuery, this).text();
+                        if (cssQuery.length() > 0)
+                            _select = Selector.select(cssQuery, this).text();
+                        else
+                            _select = this.text();
                     }
                 } else {
                     if(cssPart.contains("replace")){

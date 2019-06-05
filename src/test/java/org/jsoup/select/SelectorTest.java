@@ -811,7 +811,8 @@ public class SelectorTest {
     }
 
     @Test public void selectMethod() {
-        Document doc = Jsoup.parse("<p><span>One</span><a href='//thumb.test.com/some/text/here'>Link</a>");
+        Document doc = Jsoup.parse("<p><span>One</span><a href='//thumb.test.com/some/text/here'>Link</a></p>");
+        String _text = doc.selectx("::text()");
         String text = doc.selectx("a::text()");
         String attr = doc.selectx("a::attr(href)");
         String repl = doc.selectx("a::attr(href)::replace(thumb,image)");
@@ -821,6 +822,7 @@ public class SelectorTest {
         String spli = doc.selectx("a::attr(href)::split(\\.,1)"); //split by dot
         String spl2 = doc.selectx("a::attr(href)::split(/,3)"); //split by slash
 
+        assertEquals("OneLink", _text);
         assertEquals("Link", text);
         assertEquals("//thumb.test.com/some/text/here", attr);
         assertEquals("//image.test.com/some/text/here", repl);
