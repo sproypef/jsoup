@@ -177,4 +177,28 @@ public class DataUtilTest {
         Document doc = Jsoup.parse(soup, null, "");
         assertEquals("Hellö Wörld!", doc.body().text());
     }
+
+    @Test
+    public void urlTool(){
+        String url0 = "//some.com";
+        String url1 = "some.com";
+        String url2 = "www.some.com";
+        assertEquals("http://some.com", DataUtil.urlFix(url0));
+        assertEquals("http://some.com", DataUtil.urlFix(url1));
+        assertEquals("http://www.some.com", DataUtil.urlFix(url2));
+    }
+
+    @Test
+    public void urlCountRoutes(){
+        String url0 = "//some.com/";
+        String url1 = "some.com/cat";
+        String url2 = "www.some.com/cat/";
+        String url3 = "http://www.some.com/cat/2";
+        String url4 = "http://www.some.com/cat/2/";
+        assertEquals("0", DataUtil.urlRoutes(url0));
+        assertEquals("1", DataUtil.urlRoutes(url1));
+        assertEquals("1", DataUtil.urlRoutes(url2));
+        assertEquals("2", DataUtil.urlRoutes(url3));
+        assertEquals("2", DataUtil.urlRoutes(url4));
+    }
 }

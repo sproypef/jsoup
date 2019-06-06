@@ -817,8 +817,8 @@ public class SelectorTest {
         String attr = doc.selectx("a::attr(href)");
         String repl = doc.selectx("a::attr(href)::replace(thumb,image)");
         String repx = doc.selectx("a::attr(href)::replace(thumb|com,file)");
-        String fixu = doc.selectx("a::attr(href)::replace(thumb|com,file)::fixurl()");
-        String fixa = doc.selectx("a::attr(href)::fixurl()");
+        String fixu = doc.selectx("a::attr(href)::replace(thumb|com,file)::urlfix()");
+        String fixa = doc.selectx("a::attr(href)::urlfix()");
         String spli = doc.selectx("a::attr(href)::split(\\.,1)"); //split by dot
         String spl2 = doc.selectx("a::attr(href)::split(/,3)"); //split by slash
 

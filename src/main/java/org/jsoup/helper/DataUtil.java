@@ -277,15 +277,39 @@ public final class DataUtil {
         return inputStr.replaceAll("[()]", "");
     }
 
-    public static String fixHTTP(String url) {
+    public static String urlFix(String url) {
         try {
-            if (!url.substring(0, 6).equals("https:") && !url.substring(0, 5).equals("http:")) {
-                url = "http:" + url;
+            String missing = "";
+            if (url.substring(0, 5).contains("http") || url.substring(0, 5).contains("https")) {
+                return url;
+            } else {
+                missing += "http";
+                if (!url.substring(0, 1).contains(":"))
+                    missing += ":";
+                if (!url.substring(0, 2).contains("//"))
+                    missing += "//";
+                return missing + url;
             }
-            return url;
         } catch (IndexOutOfBoundsException e) {
-            return "";
+            return url;
         }
+    }
+
+    public static String urlRoutes(String url) {
+        int countRoutes = 0;
+        url = urlFix(url);
+        url = url.replace("http://", "");
+        url = url.replace("https://", "");
+        String[] sec = url.split("/");
+        if(sec.length == 1) 
+            return String.valueOf(countRoutes);
+        for(int i = sec.length - 1 ; i >= 0; i--){
+            if(i == 0) continue; // No count domain section
+            if(sec[i].length() > 0)
+                countRoutes++;
+        }
+        return String.valueOf(countRoutes);
+
     }
 
     public static int valueOfInteger(String str) {

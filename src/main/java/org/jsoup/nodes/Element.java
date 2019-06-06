@@ -375,10 +375,8 @@ public class Element extends Node {
 
     /**
      * Common select and more powelfull for attr() and text() methods in cssQuery.
-     * After common cssQuery add "::" and normal method call - Exclude ""
-     * Example:
-     * {@code el.select("a::attr(href)")}
-     * {@code el.select("a::text()")}
+     * After common cssQuery add "::" and normal method call - Exclude "" Example:
+     * {@code el.select("a::attr(href)")} {@code el.select("a::text()")}
      * 
      * @param cssQuery
      * @param innerMethod
@@ -412,19 +410,23 @@ public class Element extends Node {
                             _select = this.text();
                     }
                 } else {
-                    if(cssPart.contains("replace")){
+                    if (cssPart.contains("replace")) {
                         String[] p = DataUtil.removeParenthesis(cssPart.replace("replace", "")).split(",");
-                        if(p[0].contains("|")){
+                        if (p[0].contains("|")) {
                             String[] tar = p[0].split("\\|");
                             for (String t : tar) {
-                                if(_select.contains(t)) _select = _select.replace(t, p[1]);   
+                                if (_select.contains(t))
+                                    _select = _select.replace(t, p[1]);
                             }
                         } else {
                             _select = _select.replace(p[0], p[1]);
-                        }                       
+                        }
                     }
-                    if(cssPart.contains("fixurl")){
-                        _select = DataUtil.fixHTTP(_select);
+                    if (cssPart.contains("urlfix")) {
+                        _select = DataUtil.urlFix(_select);
+                    }
+                    if (cssPart.contains("urlroutes")) {
+                        _select = DataUtil.urlFix(_select);
                     }
                     if (cssPart.contains("split")) {
                         String[] p = DataUtil.removeParenthesis(cssPart.replace("split", "")).split(",");
@@ -438,7 +440,6 @@ public class Element extends Node {
                 }
                 pos++;
             }
-
         }
         return _select;
     }
