@@ -426,7 +426,7 @@ public class Element extends Node {
                         _select = DataUtil.urlFix(_select);
                     }
                     if (cssPart.contains("urlroutes")) {
-                        _select = DataUtil.urlFix(_select);
+                        _select = DataUtil.urlRoutes(_select);
                     }
                     if (cssPart.contains("split")) {
                         String[] p = DataUtil.removeParenthesis(cssPart.replace("split", "")).split(",");
