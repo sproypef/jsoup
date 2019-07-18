@@ -411,15 +411,24 @@ public class Element extends Node {
                     }
                 } else {
                     if (cssPart.contains("replace")) {
-                        String[] p = DataUtil.removeParenthesis(cssPart.replace("replace", "")).split(",");
-                        if (p[0].contains("|")) {
-                            String[] tar = p[0].split("\\|");
-                            for (String t : tar) {
-                                if (_select.contains(t))
-                                    _select = _select.replace(t, p[1]);
-                            }
+                        if (cssPart.contains("replaceAll")) {
+                            String[] p = DataUtil.removeParenthesis(cssPart.replace("replaceAll", "")).split(",");
+                            if (p.length > 1) {
+                                _select = _select.replaceAll(p[0], p[1]);
+                            } else if (p.length == 1) {
+                                _select = _select.replaceAll(p[0], "");
+                            }  
                         } else {
-                            _select = _select.replace(p[0], p[1]);
+                            String[] p = DataUtil.removeParenthesis(cssPart.replace("replace", "")).split(",");
+                            if (p[0].contains("|")) {
+                                String[] tar = p[0].split("\\|");
+                                for (String t : tar) {
+                                    if (_select.contains(t))
+                                        _select = _select.replace(t, p[1]);
+                                }
+                            } else {
+                                _select = _select.replace(p[0], p[1]);
+                            }
                         }
                     }
                     if (cssPart.contains("urlfix")) {

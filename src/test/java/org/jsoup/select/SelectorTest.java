@@ -811,12 +811,13 @@ public class SelectorTest {
     }
 
     @Test public void selectMethod() {
-        Document doc = Jsoup.parse("<p><span>One</span><a href='//thumb.test.com/some/text/here'>Link</a></p>");
+        Document doc = Jsoup.parse("<p><span>One</span><a href='//thumb.test1234.com/some/text/here'>Link</a></p>");
         String _text = doc.selectx("::text()");
         String text = doc.selectx("a::text()");
         String attr = doc.selectx("a::attr(href)");
         String repl = doc.selectx("a::attr(href)::replace(thumb,image)");
         String repx = doc.selectx("a::attr(href)::replace(thumb|com,file)");
+        String rall = doc.selectx("a::attr(href)::replaceAll(\\d,)");
         String fixu = doc.selectx("a::attr(href)::replace(thumb|com,file)::urlfix()");
         String fixa = doc.selectx("a::attr(href)::urlfix()");
         String spli = doc.selectx("a::attr(href)::split(\\.,1)"); //split by dot
@@ -824,12 +825,13 @@ public class SelectorTest {
 
         assertEquals("OneLink", _text);
         assertEquals("Link", text);
-        assertEquals("//thumb.test.com/some/text/here", attr);
-        assertEquals("//image.test.com/some/text/here", repl);
-        assertEquals("//file.test.file/some/text/here", repx);
-        assertEquals("http://file.test.file/some/text/here", fixu);
-        assertEquals("http://thumb.test.com/some/text/here", fixa);
-        assertEquals("test", spli);
+        assertEquals("//thumb.test1234.com/some/text/here", attr);
+        assertEquals("//image.test1234.com/some/text/here", repl);
+        assertEquals("//file.test1234.file/some/text/here", repx);
+        assertEquals("//thumb.test.com/some/text/here", rall);
+        assertEquals("http://file.test1234.file/some/text/here", fixu);
+        assertEquals("http://thumb.test1234.com/some/text/here", fixa);
+        assertEquals("test1234", spli);
         assertEquals("some", spl2);
     }
 }
